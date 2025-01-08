@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Login</h2>
+                    
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> Please check your username and password.
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username<span class="text-danger">*</span></label>
+                            {{ form.username }}
+                            <div class="invalid-feedback">
+                                Please enter your username.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password<span class="text-danger">*</span></label>
+                            {{ form.password }}
+                            <div class="invalid-feedback">
+                                Please enter your password.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p>Don't have an account? Register as:</p>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'donor_register' %}" class="btn btn-outline-primary">Donor</a>
+                            <a href="{% url 'volunteer_register' %}" class="btn btn-outline-primary">Volunteer</a>
+                            <a href="{% url 'nonprofit_register' %}" class="btn btn-outline-primary">Non-Profit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Form validation script
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+</script>
+{% endblock %}
+
+{% endblock %}

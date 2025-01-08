@@ -1,0 +1,53 @@
+.card {
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.card-title {
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.card-text {
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.btn-danger {
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    margin-bottom: 10px;
+    border-radius: 4px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
