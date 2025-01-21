@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">My Tasks</h2>
+    
+    <div class="row">
+        {% if assignments %}
+            {% for assignment in assignments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header 
+                            {% if assignment.status == 'completed' %}bg-success
+                            {% elif assignment.status == 'pending' %}bg-warning
+                            {% else %}bg-primary{% endif %} text-white">
+                            <h5 class="card-title mb-0">{{ assignment.task.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Status:</strong> {{ assignment.get_status_display }}</p>
+                            <p><strong>Date:</strong> {{ assignment.task.date }}</p>
+                            <p><strong>Time:</strong> {{ assignment.task.start_time }} - {{ assignment.task.end_time }}</p>
+                            <p><strong>Location:</strong> {{ assignment.task.location }}</p>
+                            
+                            {% if assignment.status == 'accepted' %}
+                                <form method="post" action="{% url 'volunteers:update_task_status' assignment.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit" class="btn btn-success">Mark as Completed</button>
+                                </form>
+                            {% endif %}
+                            
+                            {% if assignment.status == 'completed' and not assignment.feedback %}
+                                <a href="{% url 'volunteers:submit_feedback' assignment.id %}" 
+                                   class="btn btn-primary mt-2">Submit Feedback</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info">You haven't signed up for any tasks yet.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

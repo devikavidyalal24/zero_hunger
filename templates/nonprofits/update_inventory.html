@@ -1,0 +1,40 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Update Inventory</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="alert alert-danger py-1">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                Update Inventory
+                            </button>
+                            <a href="{% url 'nonprofits:inventory_list' %}" 
+                               class="btn btn-outline-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,131 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- ... existing code ... -->
+
+<!-- ... existing code ... -->
+       <!-- Pending Donations -->
+        <!--
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning">
+                    <h5 class="card-title mb-0">Pending Donations</h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_donations %}
+                        <div class="list-group">
+                            {% for donation in pending_donations %}
+                                <a href="{% url 'nonprofits:manage_donation' donation.id %}" 
+                                   class="list-group-item list-group-item-action">
+                                    <h6 class="mb-1">{{ donation.food_name }}</h6>
+                                    <small>From: {{ donation.donor.username }}</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No pending donations</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    -->
+        <!-- Active Distributions -->
+         <!--
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Active Distributions</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_distributions %}
+                        <div class="list-group">
+                            {% for distribution in active_distributions %}
+                                <a href="{% url 'nonprofits:record_distribution' distribution.id %}" 
+                                   class="list-group-item list-group-item-action">
+                                    <h6 class="mb-1">{{ distribution.location_name }}</h6>
+                                    <small>{{ distribution.distribution_date }}</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No active distributions</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    -->
+        <!-- Low Inventory -->
+         <!--
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">Low Inventory Alert</h5>
+                </div>
+                <div class="card-body">
+                    {% if low_inventory %}
+                        <div class="list-group">
+                            {% for item in low_inventory %}
+                                <a href="{% url 'nonprofits:inventory_list' %}" 
+                                   class="list-group-item list-group-item-action">
+                                    <h6 class="mb-1">{{ item.donation_management.donation.food_name }}</h6>
+                                    <small>Remaining: {{ item.available_quantity }}</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No low inventory items</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="{% url 'nonprofits:donation_management_list' %}" 
+                               class="btn btn-outline-primary w-100 mb-2">
+                                Manage Donations
+                            </a>
+                        </div>
+                        <!--
+                        <div class="col-md-3">
+                            <a href="{% url 'nonprofits:inventory_list' %}" 
+                               class="btn btn-outline-success w-100 mb-2">
+                                View Inventory
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'nonprofits:distribution_list' %}" 
+                               class="btn btn-outline-info w-100 mb-2">
+                                Manage Distributions
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-secondary w-100 mb-2">
+                                Generate Reports
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'nonprofits:manage_volunteer_tasks' %}" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-users"></i> Manage Volunteers
+                            </a>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

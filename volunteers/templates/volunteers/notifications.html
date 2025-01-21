@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Notifications</h2>
+    <div class="notifications-list">
+        {% for notification in notifications %}
+            <div class="card mb-3 {% if not notification.is_read %}bg-light{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ notification.get_notification_type_display }}</h5>
+                    <p class="card-text">{{ notification.message }}</p>
+                    <small class="text-muted">{{ notification.created_at }}</small>
+                    {% if not notification.is_read %}
+                        <form method="post" action="{% url 'volunteers:mark_notification_read' notification.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No notifications found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

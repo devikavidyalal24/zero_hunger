@@ -1,0 +1,104 @@
+{% extends 'admin_panel/base_admin.html' %}
+
+{% block admin_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">User Management</h2>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Users</h6>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="filterAll">All</button>
+                <button type="button" class="btn btn-sm btn-outline-warning" id="filterPending">Pending</button>
+                <button type="button" class="btn btn-sm btn-outline-success" id="filterApproved">Approved</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr class="user-row {% if not user.is_approved %}pending{% endif %}">
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.get_role_display }}</td>
+                            <td>
+                                {% if user.is_approved %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.date_joined|date }}</td>
+                            <td>
+                                {% if not user.is_approved %}
+                                    <form method="post" action="{% url 'admin_panel:approve_user' user.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                {% if user.is_active %}
+                                    <form method="post" action="{% url 'admin_panel:deactivate_user' user.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-ban"></i> Deactivate
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterAll = document.getElementById('filterAll');
+    const filterPending = document.getElementById('filterPending');
+    const filterApproved = document.getElementById('filterApproved');
+    const rows = document.querySelectorAll('.user-row');
+
+    filterAll.addEventListener('click', () => {
+        rows.forEach(row => row.style.display = '');
+    });
+
+    filterPending.addEventListener('click', () => {
+        rows.forEach(row => {
+            if (row.classList.contains('pending')) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    filterApproved.addEventListener('click', () => {
+        rows.forEach(row => {
+            if (!row.classList.contains('pending')) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,43 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Record Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">Distribution Details:</h6>
+                    <p><strong>Location:</strong> {{ distribution.location_name }}</p>
+                    <p><strong>Planned Quantity:</strong> {{ distribution.planned_quantity }} servings</p>
+                    <p><strong>Estimated Beneficiaries:</strong> {{ distribution.estimated_beneficiaries }}</p>
+                    
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">
+                                    {{ field.label }}
+                                </label>
+                                {{ field.errors }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Record Distribution</button>
+                            <a href="{% url 'nonprofits:distribution_list' %}" 
+                               class="btn btn-outline-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

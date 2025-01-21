@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>Donation Impact: {{ donation.food_name }}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Beneficiaries Reached</h5>
+                    <p class="display-4">{{ impact.total_beneficiaries|default:"0" }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Quantity Distributed</h5>
+                    <p class="display-4">{{ impact.total_distributed|default:"0" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

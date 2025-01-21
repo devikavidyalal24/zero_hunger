@@ -134,4 +134,51 @@ class CustomLoginForm(AuthenticationForm):
                 'required': 'required',
             }
         )
-    ) 
+    )
+
+class ForgotPasswordForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your username'
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your email'
+        })
+    )
+
+class OTPVerificationForm(forms.Form):
+    otp = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter OTP'
+        }),
+        max_length=6
+    )
+
+class ResetPasswordForm(forms.Form):
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter new password'
+        })
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm new password'
+        })
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+        
+        if new_password and confirm_password:
+            if new_password != confirm_password:
+                raise forms.ValidationError("Passwords don't match")
+        return cleaned_data 

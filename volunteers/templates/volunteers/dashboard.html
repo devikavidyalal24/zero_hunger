@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Tasks Section -->
+        <div class="col-md-8">
+            <h2>My Tasks</h2>
+            <!-- Include task list here -->
+            {% include 'volunteers/includes/task_list.html' %}
+        </div>
+
+        <!-- Notifications Section -->
+        <div class="col-md-4">
+            <h2>Notifications</h2>
+            <div class="notifications-preview">
+                {% for notification in notifications %}
+                    <div class="alert {% if not notification.is_read %}alert-info{% else %}alert-secondary{% endif %}">
+                        {{ notification.message }}
+                    </div>
+                {% empty %}
+                    <p>No new notifications</p>
+                {% endfor %}
+                <a href="{% url 'volunteers:notifications' %}" class="btn btn-primary">View All</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

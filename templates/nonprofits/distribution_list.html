@@ -1,0 +1,39 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <h2 class="mb-4">Distributions</h2>
+    
+    <div class="row">
+        {% if distributions %}
+            {% for distribution in distributions %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header {% if distribution.status == 'completed' %}bg-success
+                                              {% elif distribution.status == 'in_progress' %}bg-warning
+                                              {% else %}bg-primary{% endif %} text-white">
+                            <h5 class="card-title mb-0">{{ distribution.location_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Food Item:</strong> {{ distribution.inventory.donation_management.donation.food_name }}</p>
+                            <p><strong>Planned Quantity:</strong> {{ distribution.planned_quantity }} servings</p>
+                            <p><strong>Date:</strong> {{ distribution.distribution_date }}</p>
+                            <p><strong>Time:</strong> {{ distribution.distribution_time }}</p>
+                            <p><strong>Status:</strong> {{ distribution.get_status_display }}</p>
+                            {% if distribution.status == 'planned' or distribution.status == 'in_progress' %}
+                                <a href="{% url 'nonprofits:record_distribution' distribution.id %}" 
+                                   class="btn btn-primary">Record Distribution</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info">No distributions planned.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

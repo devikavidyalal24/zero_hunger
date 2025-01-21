@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>My Tasks</h2>
+    
+    <!-- Task Filter -->
+    <div class="task-filter mb-4">
+        <form method="get" action="{% url 'volunteers:my_tasks' %}">
+            <select name="task_type" class="form-control" onchange="this.form.submit()">
+                <option value="">All Tasks</option>
+                {% for value, label in TASK_TYPE_CHOICES %}
+                    <option value="{{ value }}" {% if task_type == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Task List -->
+    <div class="task-list">
+        {% for assignment in assignments %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ assignment.task.title }}</h5>
+                    <p class="card-text">
+                        <strong>Type:</strong> {{ assignment.task.get_task_type_display }}<br>
+                        <strong>Location:</strong> {{ assignment.task.location }}<br>
+                        <strong>Date:</strong> {{ assignment.task.date }}<br>
+                        <strong>Time:</strong> {{ assignment.task.start_time }} - {{ assignment.task.end_time }}<br>
+                        <strong>Status:</strong> {{ assignment.get_status_display }}
+                    </p>
+                    {% if assignment.status == 'pending' %}
+                        <form method="post" action="{% url 'volunteers:update_task_status' assignment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" name="status" value="accepted" class="btn btn-success">Accept</button>
+                            <button type="submit" name="status" value="declined" class="btn btn-danger">Decline</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No tasks found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">{{ task.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="task-details mb-4">
+                        <h6 class="text-primary mb-3">Task Details</h6>
+                        <p><strong>Type:</strong> {{ task.get_task_type_display }}</p>
+                        <p><strong>Description:</strong> {{ task.description }}</p>
+                        <p><strong>Location:</strong> {{ task.location }}</p>
+                        <p><strong>Date:</strong> {{ task.date }}</p>
+                        <p><strong>Time:</strong> {{ task.start_time }} - {{ task.end_time }}</p>
+                        <p><strong>Volunteers Needed:</strong> {{ task.volunteers_needed }}</p>
+                    </div>
+
+                    {% if assignment %}
+                        <div class="assignment-status mb-4">
+                            <h6 class="text-primary mb-3">Your Assignment Status</h6>
+                            <p>Status: <span class="badge bg-{{ assignment.status }}">
+                                {{ assignment.get_status_display }}</span></p>
+                            
+                            {% if assignment.status == 'pending' %}
+                                <form method="post" action="{% url 'volunteers:update_task_status' assignment.id %}"
+                                      class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="accepted">
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                                <form method="post" action="{% url 'volunteers:update_task_status' assignment.id %}"
+                                      class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="declined">
+                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="signup" value="true">
+                            <button type="submit" class="btn btn-primary">Sign Up for Task</button>
+                        </form>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'volunteers:task_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Tasks
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,54 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <h2 class="mb-4">Manage Donation</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title mb-0">Donation Details</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Food Name:</strong> {{ donation.food_name }}</p>
+            <p><strong>Quantity:</strong> {{ donation.quantity }} servings</p>
+            <p><strong>Donor:</strong> {{ donation.donor.username }}</p>
+            <p><strong>Pickup Location:</strong> {{ donation.pickup_location }}</p>
+            <p><strong>Original Pickup Date:</strong> {{ donation.pickup_date }}</p>
+            <p><strong>Original Pickup Time:</strong> {{ donation.pickup_time }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title mb-0">Management Details</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary">Update Management</button>
+                <a href="{% url 'nonprofits:donation_management_list' %}" 
+                   class="btn btn-secondary">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

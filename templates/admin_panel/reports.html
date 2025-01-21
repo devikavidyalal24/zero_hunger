@@ -1,0 +1,137 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block admin_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Analytics & Reports</h2>
+    
+    <!-- User Statistics -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">User Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="border rounded p-3 text-center">
+                                <h6>Volunteers</h6>
+                                <p class="h4 mb-0">{{ user_stats.total_volunteers }}</p>
+                                <small class="text-muted">Active in last 30 days: {{ user_stats.active_volunteers }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border rounded p-3 text-center">
+                                <h6>Donors</h6>
+                                <p class="h4 mb-0">{{ user_stats.total_donors }}</p>
+                                <small class="text-muted">Active in last 30 days: {{ user_stats.active_donors }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border rounded p-3 text-center">
+                                <h6>Non-Profit Organizations</h6>
+                                <p class="h4 mb-0">{{ user_stats.total_nonprofits }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation and Impact Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Donation Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Total Donations</h6>
+                        <p class="h4">{{ donation_stats.total_donations }}</p>
+                        <small class="text-muted">Last 30 days: {{ donation_stats.recent_donations }}</small>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Completed Donations</h6>
+                        <p class="h4">{{ donation_stats.completed_donations }}</p>
+                    </div>
+                    <div>
+                        <h6>Status Breakdown</h6>
+                        <ul class="list-unstyled">
+                            {% for status in donation_stats.status_counts %}
+                            <li>{{ status.status|title }}: {{ status.count }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Impact Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Total Beneficiaries Reached</h6>
+                        <p class="h4">{{ impact_stats.total_beneficiaries }}</p>
+                        <small class="text-muted">Last 30 days: {{ impact_stats.recent_beneficiaries }}</small>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Completed Distributions</h6>
+                        <p class="h4">{{ impact_stats.completed_distributions }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Statistics and Location Data -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Task Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Total Tasks</h6>
+                        <p class="h4">{{ task_stats.total_tasks }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Completed Tasks</h6>
+                        <p class="h4">{{ task_stats.completed_tasks }}</p>
+                        <small class="text-muted">Completion Rate: {{ task_stats.completion_rate }}%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Top Donation Locations</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for location in location_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ location.pickup_location }}
+                            <span class="badge bg-primary rounded-pill">{{ location.total }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Add any additional JavaScript for charts here
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,170 @@
+{% extends 'donations/base_donations.html' %}
+{% load static %}
+
+{% block donation_content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0 text-center">Create Food Donation</h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Food Name -->
+                        <div class="mb-4">
+                            <label for="{{ form.food_name.id_for_label }}" class="form-label fw-bold">
+                                Food Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="{{ form.food_name.name }}" 
+                                   class="form-control {% if form.food_name.errors %}is-invalid{% endif %}"
+                                   id="{{ form.food_name.id_for_label }}" 
+                                   value="{{ form.food_name.value|default:'' }}"
+                                   placeholder="Enter food name">
+                            {% if form.food_name.errors %}
+                            <div class="invalid-feedback">{{ form.food_name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="mb-4">
+                            <label for="{{ form.quantity.id_for_label }}" class="form-label fw-bold">
+                                Quantity (Servings) <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" name="{{ form.quantity.name }}" 
+                                   class="form-control {% if form.quantity.errors %}is-invalid{% endif %}"
+                                   id="{{ form.quantity.id_for_label }}" 
+                                   value="{{ form.quantity.value|default:'' }}"
+                                   min="1">
+                            {% if form.quantity.errors %}
+                            <div class="invalid-feedback">{{ form.quantity.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Pickup Location -->
+                        <div class="mb-4">
+                            <label for="{{ form.pickup_location.id_for_label }}" class="form-label fw-bold">
+                                Pickup Location <span class="text-danger">*</span>
+                            </label>
+                            <textarea name="{{ form.pickup_location.name }}" 
+                                      class="form-control {% if form.pickup_location.errors %}is-invalid{% endif %}"
+                                      id="{{ form.pickup_location.id_for_label }}" 
+                                      rows="2"
+                                      placeholder="Enter the pickup address...">{{ form.pickup_location.value|default:'' }}</textarea>
+                            {% if form.pickup_location.errors %}
+                            <div class="invalid-feedback">{{ form.pickup_location.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Pickup Date and Time -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.pickup_date.id_for_label }}" class="form-label fw-bold">
+                                    Pickup Date <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" name="{{ form.pickup_date.name }}" 
+                                       class="form-control {% if form.pickup_date.errors %}is-invalid{% endif %}"
+                                       id="{{ form.pickup_date.id_for_label }}" 
+                                       value="{{ form.pickup_date.value|date:'Y-m-d'|default:'' }}"
+                                       min="{{ today|date:'Y-m-d' }}">
+                                {% if form.pickup_date.errors %}
+                                <div class="invalid-feedback">{{ form.pickup_date.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.pickup_time.id_for_label }}" class="form-label fw-bold">
+                                    Pickup Time <span class="text-danger">*</span>
+                                </label>
+                                <input type="time" name="{{ form.pickup_time.name }}" 
+                                       class="form-control {% if form.pickup_time.errors %}is-invalid{% endif %}"
+                                       id="{{ form.pickup_time.id_for_label }}" 
+                                       value="{{ form.pickup_time.value|time:'H:i'|default:'' }}">
+                                {% if form.pickup_time.errors %}
+                                <div class="invalid-feedback">{{ form.pickup_time.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-heart me-2"></i>Submit Donation
+                            </button>
+                            <a href="{% url 'donations:donation_history' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to History
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        padding: 1.5rem;
+    }
+    .form-label {
+        margin-bottom: 0.5rem;
+    }
+    .form-control, .form-select {
+        padding: 0.75rem;
+        border-radius: 8px;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+    }
+    .btn-lg {
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+
+// Set minimum date for pickup date
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('{{ form.pickup_date.id_for_label }}').setAttribute('min', today);
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,37 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <h2 class="mb-4">Food Inventory</h2>
+    
+    <div class="row">
+        {% if inventory_items %}
+            {% for item in inventory_items %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header {% if item.available_quantity < 10 %}bg-danger text-white
+                                              {% else %}bg-success text-white{% endif %}">
+                            <h5 class="card-title mb-0">{{ item.donation_management.donation.food_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Available:</strong> {{ item.available_quantity }} servings</p>
+                            <p><strong>Storage:</strong> {{ item.get_storage_type_display }} - {{ item.storage_location }}</p>
+                            <p><strong>Expires:</strong> {{ item.expiry_date }}</p>
+                            {% if item.quality_notes %}
+                                <p><strong>Quality Notes:</strong> {{ item.quality_notes }}</p>
+                            {% endif %}
+                            <a href="{% url 'nonprofits:create_distribution' item.id %}" 
+                               class="btn btn-primary">Plan Distribution</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info">No items in inventory.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'donations',
+    'volunteers',
+    'nonprofits',
+    'admin_panel',
+    'notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'login_success'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
@@ -143,4 +148,12 @@ LOGIN_URL = 'login'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600  # 1 hour in seconds
 SESSION_SAVE_EVERY_REQUEST = True
+
+# Add these email settings at the end of the file
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tvdevika24@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'lzet wxfk jopq vrju'  # Replace with your app password
 

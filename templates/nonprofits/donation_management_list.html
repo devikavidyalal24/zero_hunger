@@ -1,0 +1,77 @@
+{% extends 'nonprofits/base_nonprofits.html' %}
+{% load static %}
+
+{% block nonprofit_content %}
+<div class="container py-4">
+    <h2 class="mb-4">Donation Management</h2>
+    
+    <!-- New Donations Section -->
+    <h3 class="mb-3">New Donations</h3>
+    <div class="row">
+        {% if unmanaged_donations %}
+            {% for donation in unmanaged_donations %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-warning">
+                            <h5 class="card-title mb-0">{{ donation.food_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Donor:</strong> {{ donation.donor.username }}</p>
+                            <p><strong>Quantity:</strong> {{ donation.quantity }} servings</p>
+                            <p><strong>Pickup Location:</strong> {{ donation.pickup_location }}</p>
+                            <p><strong>Pickup Date:</strong> {{ donation.pickup_date }}</p>
+                            <p><strong>Pickup Time:</strong> {{ donation.pickup_time }}</p>
+                            <a href="{% url 'nonprofits:manage_donation' donation.id %}" 
+                               class="btn btn-primary">Manage Donation</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info">No new donations to manage.</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Managed Donations Section -->
+    <h3 class="mt-4 mb-3">Managed Donations</h3>
+    <div class="row">
+        {% if managed_donations %}
+            {% for management in managed_donations %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header {% if management.status == 'pending_review' %}bg-warning
+                                              {% elif management.status == 'received' %}bg-success text-white
+                                              {% else %}bg-primary text-white{% endif %}">
+                            <h5 class="card-title mb-0">{{ management.donation.food_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Status:</strong> {{ management.get_status_display }}</p>
+                            <p><strong>Donor:</strong> {{ management.donation.donor.username }}</p>
+                            <p><strong>Quantity:</strong> {{ management.donation.quantity }} servings</p>
+                            {% if management.scheduled_pickup_time %}
+                                <p><strong>Pickup Time:</strong> {{ management.scheduled_pickup_time }}</p>
+                            {% endif %}
+                            {% if management.assigned_volunteer %}
+                                <p><strong>Volunteer:</strong> {{ management.assigned_volunteer.username }}</p>
+                            {% endif %}
+                            {% if management.status == 'in_transit' %}
+                                <p class="text-info">In transit with volunteer</p>
+                            {% elif management.status == 'received' %}
+                                <p class="text-success">Delivered at: {{ management.received_at }}</p>
+                            {% endif %}
+                            <a href="{% url 'nonprofits:manage_donation' management.donation.id %}" 
+                               class="btn btn-primary">Update Management</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info">No managed donations yet.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
